@@ -1,25 +1,25 @@
-Bitcoin Core version 0.17.x is now available from:
+Farmcoin Core version 0.17.x is now available from:
 
-  <https://bitcoincore.org/bin/bitcoin-core-0.17.x/>
+  <https://farmcoincore.org/bin/farmcoin-core-0.17.x/>
 
 This is a new minor version release, including new features, various bugfixes
 and performance improvements, as well as updated translations.
 
 Please report bugs using the issue tracker at GitHub:
 
-  <https://github.com/bitcoin/bitcoin/issues>
+  <https://github.com/farmcoin/farmcoin/issues>
 
 To receive security and update notifications, please subscribe to:
 
-  <https://bitcoincore.org/en/list/announcements/join/>
+  <https://farmcoincore.org/en/list/announcements/join/>
 
 How to Upgrade
 ==============
 
 If you are running an older version, shut it down. Wait until it has completely
 shut down (which might take a few minutes for older versions), then run the
-installer (on Windows) or just copy over `/Applications/Bitcoin-Qt` (on Mac)
-or `bitcoind`/`bitcoin-qt` (on Linux).
+installer (on Windows) or just copy over `/Applications/Farmcoin-Qt` (on Mac)
+or `farmcoind`/`farmcoin-qt` (on Linux).
 
 If your node has a txindex, the txindex db will be migrated the first time you
 run 0.17.0 or newer, which may take up to a few hours. Your node will not be
@@ -48,10 +48,10 @@ processing the entire blockchain.
 Compatibility
 ==============
 
-Bitcoin Core is extensively tested on multiple operating systems using
+Farmcoin Core is extensively tested on multiple operating systems using
 the Linux kernel, macOS 10.10+, and Windows 7 and newer (Windows XP is not supported).
 
-Bitcoin Core should also work on most other Unix-like systems but is not
+Farmcoin Core should also work on most other Unix-like systems but is not
 frequently tested on them.
 
 From 0.17.0 onwards macOS <10.10 is no longer supported. 0.17.0 is built using Qt 5.9.x, which doesn't
@@ -63,8 +63,8 @@ Notable changes
 Documentation
 -------------
 
-- A new document introduces Bitcoin Core's BIP174
-  [Partially-Signed Bitcoin Transactions (PSBT)](https://github.com/bitcoin/bitcoin/blob/0.17/doc/psbt.md)
+- A new document introduces Farmcoin Core's BIP174
+  [Partially-Signed Farmcoin Transactions (PSBT)](https://github.com/farmcoin/farmcoin/blob/0.17/doc/psbt.md)
   interface, which is used to allow multiple programs to collaboratively
   work to create, sign, and broadcast new transactions.  This is useful
   for offline (cold storage) wallets, multisig wallets, coinjoin
@@ -83,4 +83,4 @@ Thanks to everyone who directly contributed to this release:
 
 (todo)
 
-As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/bitcoin/).
+As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/farmcoin/).

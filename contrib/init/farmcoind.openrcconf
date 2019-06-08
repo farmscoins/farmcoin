@@ -1,0 +1,33 @@
+# /etc/conf.d/farmcoind: config file for /etc/init.d/farmcoind
+
+# Config file location
+#FARMCOIND_CONFIGFILE="/etc/farmcoin/farmcoin.conf"
+
+# What directory to write pidfile to?  (created and owned by $FARMCOIND_USER)
+#FARMCOIND_PIDDIR="/var/run/farmcoind"
+
+# What filename to give the pidfile
+#FARMCOIND_PIDFILE="${FARMCOIND_PIDDIR}/farmcoind.pid"
+
+# Where to write farmcoind data (be mindful that the blockchain is large)
+#FARMCOIND_DATADIR="/var/lib/farmcoind"
+
+# User and group to own farmcoind process
+#FARMCOIND_USER="farmcoin"
+#FARMCOIND_GROUP="farmcoin"
+
+# Path to farmcoind executable
+#FARMCOIND_BIN="/usr/bin/farmcoind"
+
+# Nice value to run farmcoind under
+#FARMCOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#FARMCOIND_OPTS=""
+
+# The timeout in seconds OpenRC will wait for farmcoind to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+FARMCOIND_SIGTERM_TIMEOUT=60

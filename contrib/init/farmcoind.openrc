@@ -1,0 +1,92 @@
+#!/sbin/openrc-run
+
+# backward compatibility for existing gentoo layout 
+#
+if [ -d "/var/lib/farmcoin/.farmcoin" ]; then
+	FARMCOIND_DEFAULT_DATADIR="/var/lib/farmcoin/.farmcoin"
+else
+	FARMCOIND_DEFAULT_DATADIR="/var/lib/farmcoind"
+fi
+
+FARMCOIND_CONFIGFILE=${FARMCOIND_CONFIGFILE:-/etc/farmcoin/farmcoin.conf}
+FARMCOIND_PIDDIR=${FARMCOIND_PIDDIR:-/var/run/farmcoind}
+FARMCOIND_PIDFILE=${FARMCOIND_PIDFILE:-${FARMCOIND_PIDDIR}/farmcoind.pid}
+FARMCOIND_DATADIR=${FARMCOIND_DATADIR:-${FARMCOIND_DEFAULT_DATADIR}}
+FARMCOIND_USER=${FARMCOIND_USER:-${FARMCOIN_USER:-farmcoin}}
+FARMCOIND_GROUP=${FARMCOIND_GROUP:-farmcoin}
+FARMCOIND_BIN=${FARMCOIND_BIN:-/usr/bin/farmcoind}
+FARMCOIND_NICE=${FARMCOIND_NICE:-${NICELEVEL:-0}}
+FARMCOIND_OPTS="${FARMCOIND_OPTS:-${FARMCOIN_OPTS}}"
+
+name="Farmcoin Core Daemon"
+description="Farmcoin cryptocurrency P2P network daemon"
+
+command="/usr/bin/farmcoind"
+command_args="-pid=\"${FARMCOIND_PIDFILE}\" \
+		-conf=\"${FARMCOIND_CONFIGFILE}\" \
+		-datadir=\"${FARMCOIND_DATADIR}\" \
+		-daemon \
+		${FARMCOIND_OPTS}"
+
+required_files="${FARMCOIND_CONFIGFILE}"
+start_stop_daemon_args="-u ${FARMCOIND_USER} \
+			-N ${FARMCOIND_NICE} -w 2000"
+pidfile="${FARMCOIND_PIDFILE}"
+
+# The retry schedule to use when stopping the daemon. Could be either
+# a timeout in seconds or multiple signal/timeout pairs (like
+# "SIGKILL/180 SIGTERM/300")
+retry="${FARMCOIND_SIGTERM_TIMEOUT}"
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${FARMCOIND_USER}:${FARMCOIND_GROUP}" \
+	"${FARMCOIND_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${FARMCOIND_USER}:${FARMCOIND_GROUP}" \
+	"${FARMCOIND_PIDDIR}"
+
+	checkpath -f \
+	-o ${FARMCOIND_USER}:${FARMCOIND_GROUP} \
+	-m 0660 \
+	${FARMCOIND_CONFIGFILE}
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if ! grep -qs '^rpcpassword=' "${FARMCOIND_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run farmcoind."
+		eerror "The setting must appear in ${FARMCOIND_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following "
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"Farmcoin Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}
